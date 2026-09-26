@@ -2,6 +2,16 @@
 
 All notable changes to moveref are documented here.
 
+## Unreleased
+
+### Unreleased Features
+
+- _(repo)_ Modernize Miri-gated moveref
+
+### Unreleased Build
+
+- _(repo)_ Generate squash-aware changelog (#3)
+
 ## 1.0.0 - 2024-07-16
 
 ### 1.0.0 Legacy
