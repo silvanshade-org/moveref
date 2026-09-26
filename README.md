@@ -1,27 +1,16 @@
-<div align="center">
-  <h1><code>moveref</code></h1>
-  <p>
-    <strong>Types and traits for safe C++ style placement initialization and move semantics</strong>
-    <br />
-    <sub>Acknowledgement: originally based on <a href="https://github.com/google/moveit">google/moveit</a></sub>
-  </p>
-  <p style="margin-bottom: 0.5ex;">
-    <a href="https://silvanshade.github.io/moveref/moveref"><img
-        src="https://img.shields.io/badge/docs-latest-blueviolet?logo=Read-the-docs&logoColor=white"
-        /></a>
-    <a href="https://github.com/silvanshade/moveref/actions"><img
-        src="https://github.com/silvanshade/moveref/workflows/ci/badge.svg"
-        /></a>
-    <a href="https://codecov.io/gh/silvanshade/moveref"><img
-        src="https://codecov.io/gh/silvanshade/moveref/branches/main/graph/badge.svg"
-        /></a>
-  </p>
-</div>
+# moveref
+
+Types and traits for safe C++-style placement initialization and move semantics.
+
+[API documentation](https://docs.rs/moveref) · [CI](https://github.com/silvanshade-org/moveref/actions/workflows/ci.yaml)
+
+Originally based on [google/moveit](https://github.com/google/moveit).
 
 ## Status
 
-This crate is considered stable and suitable for normal usage.
+This library provides in-place construction and owning move references for Rust and C++ interop. Its lifecycle tests run under Miri in CI, alongside ordinary tests, Clippy, rustdoc, and formatter gates.
 
-The internals are fully documented and test coverage aims to be as complete as possible.
+## Known lifecycle defects
 
-We additionally check the crate with [cargo careful](https://github.com/RalfJung/cargo-careful), [cargo miri](https://github.com/rust-lang/miri), and [cargo valgrind](https://github.com/jfrimmel/cargo-valgrind).
+- A failed `Slot::try_emplace` initializer leaves its storage marked as leaking. Dropping that storage aborts or panics; do not use this fallible path until the defect is resolved.
+- `SlotStorageKind::Drop` destroys a directly owned referent twice. Use `Keep` for directly stored values; `Drop` remains needed for distinct backing allocations.

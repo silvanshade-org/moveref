@@ -1,0 +1,8 @@
+# act config for local CI iteration; see docs/agents/ci-local.md.
+# Medium-size runner image: closest free match to GitHub's ubuntu-latest
+# without the multi-GB "full" variant; multi-arch, so Docker pulls the
+# arm64 build natively on Apple Silicon hosts (no QEMU tax).
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+# Reuse the already-pulled image across iteration runs; drop this flag
+# (or pass --pull on the command line) to refresh it.
+--pull=false

@@ -1,0 +1,10 @@
+#:tombi toml-version = "v1.0.0"
+#:schema https://mise.jdx.dev/schema/mise-task.json
+
+[treefmt]
+description = "Run treefmt"
+run = "treefmt"
+
+["treefmt:check"]
+description = "Run treefmt in CI mode"
+run = "treefmt --fail-on-change"

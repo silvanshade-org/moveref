@@ -1,0 +1,154 @@
+#:tombi toml-version = "v1.1.0"
+#:schema https://raw.githubusercontent.com/rvben/rumdl/refs/heads/main/rumdl.schema.json
+
+# All rules run at defaults unless configured below. Sections list only
+# non-default settings; rule numbers named for cross-reference.
+
+[global]
+flavor = "standard"
+line-length = 0
+respect-gitignore = true
+# Gitignoring is not scoping: in environments where the `.git` pointer is
+# dangling the implicit skip does not apply, so the excludes are explicit.
+exclude = [
+  ".git",
+  "target",
+  # The tool's own cache, written at the root of every tree rumdl runs in.
+  ".rumdl_cache",
+  # The shared baseline is pinned by content hash; excluded here too so
+  # standalone rumdl runs match the treefmt pipeline exclusion.
+  "/docs/agents/baseline.md",
+]
+
+# MD003
+[heading-style]
+style = "atx"
+
+# MD004
+# `dash`: one marker at every nesting depth. `*` collides with editor
+# auto-pairing and reads ambiguously against emphasis; `sublist` made a list
+# item's marker depend on its depth, so moving a block between levels rewrote it.
+[ul-style]
+style = "dash"
+
+# MD009
+[no-trailing-spaces]
+strict = true
+
+# MD013
+#
+# No hard limit: crate prose wraps by meaning, and a column limit would fight
+# the long type paths and witness identifiers the rustdoc-adjacent prose names.
+#
+# Every formatter hazard reflow can inflict comes from SENTENCE DETECTION
+# rather than from reflow as such. That distinction is why `reflow` is on in
+# the `normalize` mode: the `semantic-line-breaks` and `sentence-per-line`
+# modes have to decide where a sentence ends, and they get it wrong on an
+# embed's `!`, on a callout's title line, on `L.E.J.` in a wikilink, on
+# `Proc. ACM Program. Lang.` in a citation, and on any sentence opening with a
+# lower-case word — which crate prose writes constantly, `snake_case` witness
+# identifiers and module paths being lower-case by their own convention. Every
+# one of those failures is silent: the damaged form re-checks clean.
+#
+# `normalize` never detects a sentence. It only joins a paragraph's continuation
+# lines, so it is structurally incapable of that entire class. Probed against
+# hard line breaks, backslash breaks, display math, tables, fenced diagrams,
+# footnotes, callouts and dotted-initial wikilinks, it changes none of them.
+# The cost is that a changed paragraph is a one-line diff rather than a
+# one-sentence diff, and the benefit — beyond safety — is that prose is never
+# arbitrarily hand-wrapped, which is its own hazard and a worse one.
+#
+# `blockquotes = false` is still load-bearing under `normalize`. Without it a
+# callout's title line is joined into its body, turning the whole callout into
+# its own title.
+#
+# What rumdl buys with reflow set aside entirely, measured rather than assumed:
+# skipped heading levels, empty and whitespace-padded link destinations, bare
+# URLs, inconsistent list markers, misaligned tables, duplicate headings,
+# colliding heading anchors, and a fenced block with no language — which is
+# exactly how a diagram stops being a diagram with nothing saying so.
+[line-length]
+code-block-line-length = 0
+heading-line-length = 0
+line-length = 0
+reflow = true
+reflow-mode = "normalize"
+blockquotes = false
+
+# MD046
+[code-block-style]
+style = "fenced"
+
+# MD048
+[code-fence-style]
+style = "backtick"
+
+# MD049
+# `underscore`: emphasis stays visually distinct from the `*` list markers
+# MD004 mandates and from the `**` MD050 mandates for strong, so a reader and a
+# diff both tell the three apart. `asterisk` carries a code repository's
+# rationale — dense `snake_case` identifiers, where `_` reads as part of a
+# name — which does not hold for the prose-heavy consumers of this shape. A
+# consumer whose prose is code-adjacent enough for
+# that collision to bite takes `asterisk` as a recorded delta.
+[emphasis-style]
+style = "underscore"
+
+# MD050
+[strong-style]
+style = "asterisk"
+
+# MD052
+# `false` (upstream default): bare prose brackets like `[corrected: …]` are NOT
+# parsed as shortcut reference links, so they do not raise spurious "Reference
+# not found". Real link checking (`[text](url)` / `[text][label]`) unaffected.
+[reference-links-images]
+shortcut-syntax = false
+
+# MD055
+[table-pipe-style]
+style = "leading-and-trailing"
+
+# MD057
+[existing-relative-links]
+absolute-links = "warn"
+compact-paths = true
+
+# MD058
+[blanks-around-tables]
+minimum-before = 1
+minimum-after = 1
+
+# MD060
+#
+# `compact`: one space between a pipe and its cell, whatever the column's
+# widest cell holds. `aligned` pads every cell to the column width, so adding a
+# row whose cell is wider than the column — or widening any single cell —
+# rewrites every other row in the table. Two agents editing different rows of
+# one table then conflict over the whole block rather than over the rows they
+# each touched, and the same realignment buries a one-cell change in a diff the
+# size of the table.
+#
+# `aligned-delimiter = true` is what makes `compact` canonical rather than
+# merely narrower. Left to its default the delimiter row is preserved verbatim,
+# so a table arriving from `aligned` keeps a delimiter padded to widths no
+# other row carries any more, and nothing ever normalizes it. With it on, each
+# delimiter cell is the display width of its own header cell, less one dash per
+# alignment colon: a pure function of the header text, so a body-row edit never
+# touches it, and a header rename or a new column touches exactly two lines.
+[table-format]
+enabled = true
+style = "compact"
+aligned-delimiter = true
+
+# MD070
+[nested-code-fence]
+enabled = true
+
+# MD073
+[MD073]
+enabled = true
+
+# MD080
+[heading-anchor-collision]
+enabled = true
