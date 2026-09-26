@@ -48,6 +48,7 @@ includes = [".config/mise/tasks"]
 "github:crate-ci/typos" = "v1.50.0"
 "github:max-sixty/worktrunk" = "v0.75.0"
 "github:nextest-rs/nextest" = "cargo-nextest-0.9.143"
+"github:orhun/git-cliff" = "2.13.1"
 "github:numtide/treefmt" = "2.5.0"
 "github:j178/prek" = "v0.5.0"
 "github:koalaman/shellcheck" = "0.11.0"

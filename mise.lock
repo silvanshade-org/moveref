@@ -477,6 +477,46 @@ checksum = "sha256:21388b1f7d6c2f572e1ce9231f7dfc08f80a062438908791ab078c1d76b10
 url = "https://github.com/numtide/treefmt/releases/download/v2.5.0/treefmt_2.5.0_darwin_amd64.tar.gz"
 url_api = "https://api.github.com/repos/numtide/treefmt/releases/assets/391045231"
 
+[[tools."github:orhun/git-cliff"]]
+version = "2.13.1"
+backend = "github:orhun/git-cliff"
+specifiers = ["2.13.1"]
+
+[tools."github:orhun/git-cliff"."platforms.linux-arm64"]
+checksum = "sha256:9619b7f0c584229f8a2331c1905afe88bd938bdc9102926c2073836a42f02455"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405850077"
+
+[tools."github:orhun/git-cliff"."platforms.linux-arm64-musl"]
+checksum = "sha256:4054c124b926c117f3fa048939bc8be0a954f29f3b6f367627e8cb22c1971882"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405850720"
+
+[tools."github:orhun/git-cliff"."platforms.linux-x64"]
+checksum = "sha256:9a1263f24e59a2f508c7b3d3283c9dea94a8bf697f96dbc18cc783cac6284546"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405850439"
+
+[tools."github:orhun/git-cliff"."platforms.linux-x64-musl"]
+checksum = "sha256:200d2535da6d9703f3bcc8a4d159c3b55eacdb01cf2148c55b3eee9dd04d5249"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405850671"
+
+[tools."github:orhun/git-cliff"."platforms.macos-arm64"]
+checksum = "sha256:21547ae4a0421164070ab75c2522864ea5565858a011fabc5f583061b20f1226"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405849885"
+
+[tools."github:orhun/git-cliff"."platforms.macos-x64"]
+checksum = "sha256:6e60ae390d375cecb9d8008c49f0e724a8dfe40390b532ef5501e421d2cc8acb"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405850193"
+
+[tools."github:orhun/git-cliff"."platforms.windows-x64"]
+checksum = "sha256:3ae3a5549e85c7ad5b20192ebcfee4371269deca51255f6f2f2e051c6541f5ca"
+url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405851866"
+
 [[tools."github:rvben/rumdl"]]
 version = "0.2.62"
 backend = "github:rvben/rumdl"
@@ -653,12 +693,12 @@ url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-win-x64.zip"
 
 [[tools."npm:@commitlint/cli"]]
 version = "21.2.2"
-aube = { path = ".mise/locks/npm-commitlint-cli/21.2.2", digest = "sha256:f096e0185c9d340eb1674ee6468b9092d4478c1f585f1c10bed47e6c84c150e7" }
+aube = { path = ".mise/locks/npm-commitlint-cli/21.2.2", digest = "sha256:b7c34b342579329bd74cacf460e1b65cc38dc156999e78f5a50dd73ef7e89b1d" }
 backend = "npm:@commitlint/cli"
 specifiers = ["21.2.2"]
 
 [[tools."npm:oxfmt"]]
 version = "0.65.0"
-aube = { path = ".mise/locks/npm-oxfmt/0.65.0", digest = "sha256:875f746f68ebd84620ff1bd3fcec8bf522ee681ee88330bfa656ae0f578fc5e4" }
+aube = { path = ".mise/locks/npm-oxfmt/0.65.0", digest = "sha256:d5e6c3c1d4a69d15bdb76c5575508d39847799c88b3c0e93aa492da2c324accd" }
 backend = "npm:oxfmt"
 specifiers = ["0.65.0"]

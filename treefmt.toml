@@ -5,12 +5,22 @@
 excludes = [
   "target/**",
   ".codegraph/**",
+  ".git-cliff-output",
   "**/LICENSE.*.txt",
   "Cargo.lock",
   "mise.lock",
   ".rumdl_cache",
   "docs/agents/baseline.md",
 ]
+
+# Generate release notes before Markdown formatting. The renderer only replaces
+# the root file when its contents change.
+[formatter."changelog-generate"]
+priority = -3
+command = "mise"
+options = ["run", "changelog:render"]
+includes = ["CHANGELOG.md"]
+no-positional-arg-support = true
 
 # Formatter entries below match the pins in `mise.toml`.
 

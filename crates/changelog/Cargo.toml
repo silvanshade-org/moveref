@@ -1,0 +1,19 @@
+[package]
+name = "moveref-changelog"
+version = "0.0.0"
+edition = "2024"
+description = "Squash-aware changelog generation for moveref"
+repository = "https://github.com/silvanshade-org/moveref"
+license = "Apache-2.0 WITH LLVM-exception"
+publish = false
+
+[[bin]]
+name = "moveref-changelog"
+path = "src/main.rs"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true
