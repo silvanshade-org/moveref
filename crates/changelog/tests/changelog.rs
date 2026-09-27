@@ -139,6 +139,8 @@ mod tests
         fs::create_dir_all(&repo)?;
         fs::write(repo.join("cliff.toml"), include_str!("../../../cliff.toml"))?;
         git(&repo, GitArgs(&["init", "-q", "-b", "main"]))?;
+        git(&repo, GitArgs(&["config", "commit.gpgSign", "false"]))?;
+        git(&repo, GitArgs(&["config", "tag.gpgSign", "false"]))?;
         git(&repo, GitArgs(&["config", "user.name", "Release fixture"]))?;
         git(
             &repo,
