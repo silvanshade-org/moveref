@@ -21,6 +21,22 @@ runs:
       if: ${{ inputs.install-toolchain == 'true' }}
       run: rustup toolchain install
       shell: bash
+    - name: verify rustup Cargo proxies before mise
+      if: ${{ inputs.install-toolchain == 'true' }}
+      shell: bash
+      run: |
+        if [ "$RUNNER_OS" = Windows ]; then
+          cargo_home="$(cygpath -u "${CARGO_HOME:-$USERPROFILE/.cargo}")"
+          extension=.exe
+        else
+          cargo_home="${CARGO_HOME:-$HOME/.cargo}"
+          extension=
+        fi
+        bin="$cargo_home/bin"
+        if [ ! -x "$bin/cargo$extension" ] || [ ! -x "$bin/rustc$extension" ]; then
+          echo "rustup cargo/rustc proxies missing in $bin" >&2
+          exit 1
+        fi
     - name: save rustup toolchain
       if: ${{ inputs.install-toolchain == 'true' && inputs.cache-save == 'true' && steps.rustup-restore.outputs.cache-hit != 'true' }}
       uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0

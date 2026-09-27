@@ -28,15 +28,12 @@ binstall_quickinstall = true
 package_manager = "aube"
 
 [env]
-# Resolves rustup from PATH, else from its fixed install dir ($CARGO_HOME/bin,
-# default ~/.cargo/bin), so activation never depends on the launching shell's
-# PATH. Fails loudly when rustup is absent from both: a nonexistent-path
-# fallback would let a Homebrew cargo keep resolving while RUSTUP_TOOLCHAIN
-# silently binds nothing. The resolved dir must also carry the executable
-# cargo/rustc proxy pair: a dir that resolves rustup but lacks the proxies
-# (a partial install, a stale PATH entry) would keep cargo/rustc resolving
-# to distribution copies while the pin points at nothing.
-_.path = ["{{ exec(command='r=$(command -v rustup) || r=\"${CARGO_HOME:-$HOME/.cargo}/bin/rustup\"; [ -x \"$r\" ] || { echo \"rustup required: the pinned toolchains resolve through it\" >&2; exit 1; }; d=$(dirname \"$r\"); if [ ! -x \"$d/cargo\" ] || [ ! -x \"$d/rustc\" ]; then echo \"the rustup dir $d lacks the executable cargo/rustc proxies: the pinned toolchains resolve through the proxy pair\" >&2; exit 1; fi; printf \"%s\" \"$d\"') }}"]
+# Windows mise does not evaluate POSIX exec templates. Its CI Rust setup checks
+# the Cargo-home proxy pair before tools are installed; the path then selects it.
+# Unix prefers Cargo-home proxies over a Homebrew rustup in another directory,
+# but can use the rustup directory if it carries both proxies. Either way, a
+# missing rustup or proxy pair fails instead of running distribution cargo.
+_.path = ["{% if get_env(name='RUNNER_OS', default='') == 'Windows' %}{{ get_env(name='CARGO_HOME', default=get_env(name='USERPROFILE', default='') ~ '/.cargo') }}/bin{% else %}{{ exec(command='r=$(command -v rustup) || r=\"${CARGO_HOME:-$HOME/.cargo}/bin/rustup\"; [ -x \"$r\" ] || { echo \"rustup required: the pinned toolchains resolve through it\" >&2; exit 1; }; d=\"${CARGO_HOME:-$HOME/.cargo}/bin\"; if [ ! -x \"$d/cargo\" ] || [ ! -x \"$d/rustc\" ]; then d=$(dirname \"$r\"); [ -x \"$d/cargo\" ] && [ -x \"$d/rustc\" ] || { echo \"neither Cargo home nor the rustup dir carries cargo/rustc proxies\" >&2; exit 1; }; fi; printf \"%s\" \"$d\"') }}{% endif %}"]
 
 [task_config]
 includes = [".config/mise/tasks"]
