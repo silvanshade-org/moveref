@@ -8,6 +8,10 @@ All notable changes to moveref are documented here.
 
 - _(repo)_ Modernize Miri-gated moveref
 
+### Unreleased Bug Fixes
+
+- _(ci)_ Select rustup proxies across platforms
+
 ### Unreleased Build
 
 - _(repo)_ Generate squash-aware changelog (#3)
