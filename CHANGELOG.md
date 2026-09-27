@@ -6,12 +6,7 @@ All notable changes to moveref are documented here.
 
 ### Unreleased Features
 
-- _(repo)_ Modernize Miri-gated moveref
-
-### Unreleased Bug Fixes
-
-- _(ci)_ Select rustup proxies across platforms
-- _(ci)_ Skip unavailable Windows formatter
+- _(repo)_ Modernize Miri-gated moveref (#2)
 
 ### Unreleased Build
 
