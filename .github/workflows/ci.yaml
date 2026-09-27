@@ -160,6 +160,11 @@ jobs:
     steps:
       - *checkout
       - *setup-rust
+      # The formatter is checked on Linux and has no Windows release asset.
+      - name: skip unavailable Windows formatter
+        if: ${{ runner.os == 'Windows' }}
+        shell: bash
+        run: echo "MISE_DISABLE_TOOLS=${MISE_DISABLE_TOOLS},github:numtide/treefmt" >> "$GITHUB_ENV"
       - *setup-mise
       - name: run platform lifecycle tests and doctests
         run: mise run check:test
