@@ -11,6 +11,7 @@ All notable changes to moveref are documented here.
 ### Unreleased Bug Fixes
 
 - _(ci)_ Select rustup proxies across platforms
+- _(ci)_ Skip unavailable Windows formatter
 
 ### Unreleased Build
 
