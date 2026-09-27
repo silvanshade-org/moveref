@@ -161,9 +161,17 @@ mod tests
         fs::write(repo.join("event.json"), serde_json::to_vec(&event)?)?;
 
         let review = render(&repo, Event::PullRequest)?;
-        assert!(review.contains("## Unreleased\n"));
-        assert!(review.contains("- _(core)_ Add documented move (#17)\n"));
-        assert!(review.contains("- _(core)_ Deployed parent\n"));
+        assert!(review.lines().any(|line| line == "## Unreleased"));
+        assert!(
+            review
+                .lines()
+                .any(|line| line == "- _(core)_ Add documented move (#17)")
+        );
+        assert!(
+            review
+                .lines()
+                .any(|line| line == "- _(core)_ Deployed parent")
+        );
         assert!(review.contains("## 1.0.0 - "));
         assert!(!review.contains("Transient experiment"));
         assert!(!review.contains("Transient adjustment"));
