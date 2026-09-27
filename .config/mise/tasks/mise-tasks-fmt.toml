@@ -2,9 +2,13 @@
 #:schema https://mise.jdx.dev/schema/mise-task.json
 
 [treefmt]
-description = "Run treefmt"
-run = "treefmt"
+description = "Run treefmt without caching Git commit identity"
+run = "treefmt --no-cache"
 
 ["treefmt:check"]
-description = "Run treefmt in CI mode"
-run = "treefmt --fail-on-change"
+description = "Check formatting and generated history against current commits"
+run = "treefmt --no-cache --fail-on-change"
+
+["changelog:render"]
+description = "Render tagged history or the eventual squash commit for a review"
+run = "cargo run --quiet -p moveref-changelog"

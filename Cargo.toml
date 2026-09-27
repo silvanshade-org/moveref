@@ -10,6 +10,8 @@ keywords = ["C++", "allocation", "ffi", "memory", "references"]
 categories = ["compilers", "external-ffi-bindings", "memory-management", "no-std", "rust-patterns"]
 
 [workspace]
+members = ["crates/changelog"]
+
 [workspace.dependencies]
 # C++20 bridge bindings for the default feature.
 # consumers:
@@ -19,6 +21,14 @@ cxx = { version = "1.0", default-features = false, features = ["std"] }
 # consumers:
 # - moveref
 seahash = { version = "4.1", default-features = false }
+# Deserialize CI events and local review metadata for the release-note tool.
+# consumers:
+# - moveref-changelog
+serde = { version = "1.0", default-features = false, features = ["derive", "std"] }
+# Parse GitHub event and CLI JSON for the release-note tool.
+# consumers:
+# - moveref-changelog
+serde_json = { version = "1.0", default-features = false, features = ["std"] }
 # Optional instrumentation for the debug feature.
 # consumers:
 # - moveref
