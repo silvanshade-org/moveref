@@ -1,0 +1,67 @@
+#:tombi toml-version = "v1.1.0"
+#:schema https://mise.jdx.dev/schema/mise.json
+# The published mise schema omits several live `settings` keys; strict mode
+# would reject them.
+#:tombi schema.strict = false
+
+min_version = "2026.8.15"
+
+[settings]
+activate_aggressive = true
+experimental = true
+env_shell_expand = true
+minimum_release_age = "1d"
+lockfile = true
+
+[settings.cargo]
+binstall = true
+# mise's built-in binstall: fetches crate binaries itself, no external
+# cargo-binstall needed — without it, CI falls back to `cargo install`
+# source builds for every cargo pin.
+binstall_native = true
+# mise disables cargo-quickinstall by default (jdx/mise PR 10923), so pins
+# without crate-author binstall artifacts compile from source (~20 min CI
+# lanes). Owner-accepted trust boundary: quickinstall's third-party binaries.
+binstall_quickinstall = true
+
+[settings.npm]
+package_manager = "aube"
+
+[env]
+# Windows mise does not evaluate POSIX exec templates. Its CI Rust setup checks
+# the Cargo-home proxy pair before tools are installed; the path then selects it.
+# Unix prefers Cargo-home proxies over a Homebrew rustup in another directory,
+# but can use the rustup directory if it carries both proxies. Either way, a
+# missing rustup or proxy pair fails instead of running distribution cargo.
+_.path = ["{% if get_env(name='RUNNER_OS', default='') == 'Windows' %}{{ get_env(name='CARGO_HOME', default=get_env(name='USERPROFILE', default='') ~ '/.cargo') }}/bin{% else %}{{ exec(command='r=$(command -v rustup) || r=\"${CARGO_HOME:-$HOME/.cargo}/bin/rustup\"; [ -x \"$r\" ] || { echo \"rustup required: the pinned toolchains resolve through it\" >&2; exit 1; }; d=\"${CARGO_HOME:-$HOME/.cargo}/bin\"; if [ ! -x \"$d/cargo\" ] || [ ! -x \"$d/rustc\" ]; then d=$(dirname \"$r\"); [ -x \"$d/cargo\" ] && [ -x \"$d/rustc\" ] || { echo \"neither Cargo home nor the rustup dir carries cargo/rustc proxies\" >&2; exit 1; }; fi; printf \"%s\" \"$d\"') }}{% endif %}"]
+
+[task_config]
+includes = [".config/mise/tasks"]
+
+# Formatter, hook, changelog and local-CI pins stay with their configured commands.
+[tools]
+"github:aubepkg/aube" = "2.2.4"
+"github:cli/cli" = "2.100.0"
+"github:EmbarkStudios/cargo-deny" = "0.20.2"
+# The project index is initialized from the existing Rust source.
+"github:colbymchenry/codegraph" = "1.6.0"
+"github:crate-ci/typos" = "v1.50.0"
+"github:max-sixty/worktrunk" = "v0.75.0"
+"github:nextest-rs/nextest" = "cargo-nextest-0.9.143"
+"github:numtide/treefmt" = "2.5.0"
+"github:j178/prek" = "v0.5.0"
+"github:koalaman/shellcheck" = "0.11.0"
+"github:rvben/rumdl" = "0.2.62"
+"github:tombi-toml/tombi" = "1.5.0"
+"github:woodruffw/zizmor" = "v1.30.1"
+"npm:@commitlint/cli" = "21.2.2"
+"npm:oxfmt" = "0.65.0"
+node = "26.8.1"
+
+# sizelint has no release binary; this pin builds from source.
+[tools."cargo:sizelint"]
+version = "0.1.5"
+
+# The hosted workflow is exercised locally with act.
+[tools."github:nektos/act"]
+version = "0.2.89"

@@ -1,0 +1,67 @@
+#:tombi toml-version = "v1.1.0"
+#:schema https://www.schemastore.org/treefmt.json
+
+# Exclude build output, resolver-owned files, and the pinned shared page.
+excludes = [
+  "target/**",
+  ".codegraph/**",
+  "**/LICENSE.*.txt",
+  "Cargo.lock",
+  "mise.lock",
+  ".rumdl_cache",
+  "docs/agents/baseline.md",
+]
+
+# Formatter entries below match the pins in `mise.toml`.
+
+[formatter.rustfmt]
+command = "rustfmt"
+options = ["--edition", "2024"]
+includes = ["*.rs"]
+
+# The mutating formatter takes the lower priority so `fmt` completes before
+# `check` when both cover the same markdown set.
+[formatter."rumdl-format"]
+priority = 0
+command = "rumdl"
+options = ["fmt"]
+includes = ["*.md"]
+
+[formatter."rumdl-verify"]
+priority = 1
+command = "rumdl"
+options = ["check"]
+includes = ["*.md"]
+
+[formatter."tombi-format"]
+priority = 0
+command = "tombi"
+options = ["format"]
+includes = ["*.toml"]
+
+[formatter."tombi-lint"]
+priority = 1
+command = "tombi"
+options = ["lint", "--error-on-warnings"]
+includes = ["*.toml"]
+
+[formatter.oxfmt]
+command = "oxfmt"
+options = ["--config", ".oxfmtrc.json"]
+includes = ["*.json", "*.jsonc", "*.yaml", "*.yml", "*.mjs"]
+
+[formatter.typos]
+command = "typos"
+options = ["--write-changes", "--force-exclude"]
+includes = ["*"]
+
+# Check-only: doc-sprawl size budgets.
+[formatter.sizelint]
+command = "sizelint"
+options = ["check"]
+includes = ["*"]
+
+# Check-only: shell lint at default severity (style included); a per-line directive with its reason is the only sanctioned suppression.
+[formatter.shellcheck]
+command = "shellcheck"
+includes = ["*.sh"]

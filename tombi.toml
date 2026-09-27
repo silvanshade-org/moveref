@@ -1,0 +1,17 @@
+toml-version = "v1.1.0"
+
+[format]
+rules.comment-style = "normalize"
+rules.trailing-comment-alignment = true
+
+[lint]
+rules.dotted-keys-out-of-order = "error"
+rules.tables-out-of-order = "error"
+
+[[schemas]]
+toml-version = "v1.1.0"
+path = "tombi://www.schemastore.org/cargo.json"
+# Member manifests get the cargo schema too: a workspace's per-crate manifests
+# carry the same key space as the root, and a schema bound to the root alone
+# leaves every member unchecked.
+include = ["Cargo.toml", "crates/*/Cargo.toml"]

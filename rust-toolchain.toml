@@ -1,3 +1,7 @@
+#:tombi toml-version = "v1.0.0"
+# One nightly drives edition 2024, Clippy, rustdoc, and the full Miri suite.
+
 [toolchain]
-channel = "nightly-2024-04-27"
-profile = "default"
+channel = "nightly-2026-06-25"
+components = ["clippy", "rustfmt", "miri", "rust-src"]
+profile = "minimal"

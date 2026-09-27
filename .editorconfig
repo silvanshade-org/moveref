@@ -1,3 +1,13 @@
+# The editor-side half of the formatting rules, for the moment before a
+# formatter runs.
+#
+# `trim_trailing_whitespace = true` agrees with rumdl's MD009 no-trailing-spaces
+# (strict): the editor and the Markdown linter stay consistent. A consumer that
+# relies on two-space Markdown hard breaks must relax BOTH together.
+#
+# delta: append one section per language the consumer writes that does not take
+# the two-space default. The Rust section below is the one every managed Rust
+# project takes.
 root = true
 
 [*]

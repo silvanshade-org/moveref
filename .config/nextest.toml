@@ -1,0 +1,20 @@
+#:tombi toml-version = "v1.0.0"
+
+# `status-level = "pass"` keeps every test's elapsed time on the local run, and
+# the CI profile's JUnit report carries per-test durations, so timing outliers
+# stay visible without a separate instrumentation pass.
+[profile.default]
+status-level = "pass"
+final-status-level = "slow"
+failure-output = "immediate"
+slow-timeout = { period = "30s", terminate-after = 4 }
+
+[profile.ci]
+status-level = "slow"
+final-status-level = "slow"
+failure-output = "immediate-final"
+fail-fast = false
+slow-timeout = { period = "60s", terminate-after = 4 }
+
+[profile.ci.junit]
+path = "junit.xml"

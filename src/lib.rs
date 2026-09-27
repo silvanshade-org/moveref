@@ -1,13 +1,8 @@
-#![deny(clippy::all)]
-#![deny(clippy::cargo)]
-#![deny(clippy::implicit_return)]
-#![deny(clippy::nursery)]
-#![deny(clippy::pedantic)]
-#![deny(clippy::missing_docs_in_private_items)]
-#![allow(clippy::needless_return)]
-#![allow(clippy::redundant_pub_crate)]
-#![allow(clippy::type_repetition_in_bounds)]
 #![no_std]
+#![expect(
+    clippy::multiple_crate_versions,
+    reason = "cxxbridge-macro and tracing-attributes depend on different syn majors"
+)]
 
 //! Types and traits for C++ style placement initialization and move semantics.
 
@@ -15,7 +10,11 @@
 extern crate alloc;
 
 #[cfg(feature = "alloc")]
-pub(crate) use alloc::{boxed::Box, rc::Rc, sync::Arc};
+pub(crate) use alloc::boxed::Box;
+#[cfg(feature = "alloc")]
+pub(crate) use alloc::rc::Rc;
+#[cfg(feature = "alloc")]
+pub(crate) use alloc::sync::Arc;
 
 /// Macros for creating [`crate::MoveRef`] values.
 #[macro_use]
@@ -40,9 +39,12 @@ pub use deref_move::DerefMove;
 pub use emplace::Emplace;
 pub use into_move::IntoMove;
 pub use move_ref::MoveRef;
-pub use new::{CopyNew, MoveNew, New};
+pub use new::CopyNew;
+pub use new::MoveNew;
+pub use new::New;
 pub use slot::Slot;
-pub use slot_storage::{SlotStorage, SlotStorageKind};
+pub use slot_storage::SlotStorage;
+pub use slot_storage::SlotStorageKind;
 
 trivial_copy! {
     (),

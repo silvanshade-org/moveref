@@ -1,0 +1,17 @@
+#:tombi toml-version = "v1.1.0"
+#:schema https://raw.githubusercontent.com/crate-ci/typos/master/config.schema.json
+
+[files]
+# treefmt.toml: formatter names and glob fragments read as typos to the checker.
+extend-exclude = ["treefmt.toml"]
+
+[default]
+
+# Standing rule: an unwanted rewrite is fixed by growing this allowlist, never
+# by rewording the prose. Grown from this repo's own vocabulary.
+[default.extend-words]
+# Hyphen-split prose fragments ("mis-ordered", "mis-framed", "mis-shaped").
+mis = "mis"
+# Decoder-error vocabulary: material that cannot be parsed at all, as distinct
+# from material that parses to something refused.
+unparseable = "unparseable"

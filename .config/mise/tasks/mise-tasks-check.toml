@@ -1,0 +1,84 @@
+#:tombi toml-version = "v1.0.0"
+#:schema https://mise.jdx.dev/schema/mise-task.json
+
+# Git writes conflict markers as EXACTLY seven marker characters followed by
+# end-of-line or whitespace plus a label (`<<<<<<< HEAD`, bare `=======`).
+# Anchoring on `([[:space:]]|$)` keeps real markers matched while rejecting
+# longer decorative runs -- setext underlines and `====` delimiter rules are
+# not conflicts. The `:/` pathspec scopes the scan to tracked files under the
+# repository root whatever directory the hook runs from.
+["check:conflict-markers"]
+description = "Detect unresolved Git conflict markers in tracked files"
+run = """
+if git grep -nIE '^(<<<<<<<|=======|>>>>>>>|\\|\\|\\|\\|\\|\\|\\|)([[:space:]]|$)' -- ':/'; then
+  echo 'conflict marker check FAILED: unresolved Git conflict markers found' >&2
+  exit 1
+fi
+echo 'conflict marker check OK: no conflict markers in tracked files'
+"""
+
+# delta: a repository that must refuse private-material references adds its own
+# `check:private-paths` task here. The deny list is that repository's own
+# boundary statement — the names it refuses are the names its operator keeps out
+# of it — so no shared copy can supply it.
+
+# The pin is `docs/agents/baseline.sha256` beside the page, one `sha256sum` check
+# line copied with it. macOS ships `sha256sum` as `/sbin/sha256sum`.
+# delta: the canonical repository runs `baseline-hash-check --canonical` instead.
+["check:baseline-hash"]
+description = "Check the shared baseline page against the pin beside it"
+run = "sha256sum -c docs/agents/baseline.sha256"
+
+# The private-item rustdoc gate, ported from the prototype's merge wall.
+# `RUSTDOCFLAGS="-D warnings"` makes every rustdoc lint fatal for the targets
+# rustdoc reads (library targets; test-target doc comments are invisible to
+# `cargo doc` by construction). Every workspace member is included. An
+# external Dylint library is built in its own repository, not as a consumer
+# workspace member. The clippy wall's `missing_docs_in_private_items`
+# supplies the missing-docs half; this gate supplies the rustdoc-lint half.
+# delta: the gate reads a Cargo workspace. A consumer with no manifest yet drops
+# this task, and takes it back in the change that opens the workspace, so the
+# first crate is documented under the gate rather than retrofitted to it.
+["check:doc"]
+description = "Check workspace private-item rustdoc with intra-doc links denied"
+run = """
+RUSTDOCFLAGS="-D warnings"
+export RUSTDOCFLAGS
+cargo doc --workspace --no-deps --document-private-items
+"""
+
+# This library does not load an external compiler plugin. Its own gates
+# cover both ordinary and interpreted lifecycle behavior.
+["check:build"]
+description = "Type-check all targets and the no-std configuration"
+run = "cargo check --workspace --all-targets --all-features && cargo check --no-default-features"
+
+["check:clippy"]
+description = "Enforce the workspace lint wall over all targets"
+run = "cargo clippy --workspace --all-targets --all-features -- --deny warnings"
+
+["check:deny"]
+description = "Check dependency bans, licenses, and sources"
+run = "cargo deny check bans licenses sources"
+
+["check:test"]
+description = "Run the library suite and doctests"
+run = "cargo nextest run --workspace --all-features && cargo test --workspace --doc --all-features"
+
+["check:miri"]
+description = "Interpret the complete library test suite under Miri"
+run = "cargo miri test --workspace --all-targets --all-features"
+
+["check:format"]
+description = "Check every configured formatter"
+run = "mise run treefmt:check"
+
+["check:workflow"]
+description = "Inspect hosted workflow security"
+run = "zizmor .github/workflows"
+
+# Fan out to every check:* task; a new check:* task is picked up
+# without touching this one.
+[check]
+description = "Run all check:* tasks"
+depends = ["check:*"]

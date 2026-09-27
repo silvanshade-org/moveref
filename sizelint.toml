@@ -1,0 +1,31 @@
+#:tombi toml-version = "v1.1.0"
+
+# Top-level limits are the default rule's thresholds; warnings are advisory
+# tree-wide (fail_on_warn), errors gate.
+max_file_size = "2MB"
+warn_file_size = "1MB"
+check_staged = true
+check_working_tree = true
+respect_gitignore = true
+fail_on_warn = false
+
+[rules.default]
+enabled = true
+description = "Default file size check"
+suggestion = "Add the file to 'excludes' or adjust 'max_file_size' in sizelint.toml"
+
+# Doc sprawl budgets. Trigger: disk size, per page, never per total.
+# warn = add a TOC, declare the next seam; error = split before merge. Over
+# budget: split into one-subject modules; split pages carry everything the
+# unsplit page carried. NEVER trim, elide, or compress to pass.
+[rules.doc_sprawl]
+enabled = true
+priority = 100
+description = "Markdown page over doc-sprawl budget"
+suggestion = "Split into one-subject modules with a TOC; never trim content to pass"
+includes = ["*.md"]
+warn_size = "32KB"
+max_size = "64KB"
+# Burn-down list for pages that predate the budgets. Entries leave as splits
+# land; entries never enter without owner sign-off.
+excludes = []
