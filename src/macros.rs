@@ -288,7 +288,9 @@ mod test
             let mut that = ::core::pin::pin!(that);
             // SAFETY: the bool CopyNew implementation writes into this fresh pinned
             // storage.
-            unsafe { new::CopyNew::copy_new(this, that.as_mut()) };
+            unsafe {
+                new::CopyNew::copy_new(this, that.as_mut());
+            }
             // SAFETY: copy_new returned after initializing the destination.
             let that = unsafe { that.assume_init() };
             assert_eq!(this, &that);
@@ -302,7 +304,9 @@ mod test
             let mut that = ::core::pin::pin!(that);
             // SAFETY: the bool MoveNew implementation consumes the source and initializes
             // that.
-            unsafe { new::MoveNew::move_new(this, that.as_mut()) };
+            unsafe {
+                new::MoveNew::move_new(this, that.as_mut());
+            }
             // SAFETY: move_new returned after initializing the destination.
             let that = unsafe { that.assume_init() };
             assert_eq!(VAL, that);

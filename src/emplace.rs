@@ -96,7 +96,9 @@ impl<T> Emplace<T> for crate::Box<T>
         // pin.
         let pin = unsafe { Pin::new_unchecked(&mut *uninit) };
         // SAFETY: the initializer receives fresh pinned uninitialized storage.
-        unsafe { new.try_new(pin)? };
+        unsafe {
+            new.try_new(pin)?;
+        }
         // SAFETY: successful initialization left a valid T in the same allocation.
         let ptr = unsafe { Self::from_raw(crate::Box::into_raw(uninit).cast::<T>()) };
         return Ok(Self::into_pin(ptr));
@@ -142,7 +144,9 @@ impl<T> Emplace<T> for crate::Rc<T>
         // pin.
         let pin = unsafe { Pin::new_unchecked(ptr) };
         // SAFETY: the initializer receives fresh pinned uninitialized storage.
-        unsafe { new.try_new(pin)? };
+        unsafe {
+            new.try_new(pin)?;
+        }
         // SAFETY: successful initialization left a valid T in the same allocation.
         let ptr = unsafe { Self::from_raw(crate::Rc::into_raw(uninit).cast::<T>()) };
         // SAFETY: the Rc points to the initialized T and its allocation stays stable.
@@ -190,7 +194,9 @@ impl<T> Emplace<T> for crate::Arc<T>
         // pin.
         let pin = unsafe { Pin::new_unchecked(ptr) };
         // SAFETY: the initializer receives fresh pinned uninitialized storage.
-        unsafe { new.try_new(pin)? };
+        unsafe {
+            new.try_new(pin)?;
+        }
         // SAFETY: successful initialization left a valid T in the same allocation.
         let ptr = unsafe { Self::from_raw(crate::Arc::into_raw(uninit).cast::<T>()) };
         // SAFETY: the Arc points to the initialized T and its allocation stays stable.

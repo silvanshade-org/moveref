@@ -95,7 +95,9 @@ impl<N: New> TryNew for N
     ) -> Result<(), Self::Error>
     {
         // SAFETY: `TryNew` inherits the caller's `New` initialization requirements.
-        unsafe { self.new(this) };
+        unsafe {
+            self.new(this);
+        }
         return Ok(());
     }
 }
@@ -309,7 +311,9 @@ where
         );
         let src = ptr.into_move(storage);
         // SAFETY: src is an owning pinned reference, dst is fresh pinned storage.
-        unsafe { MoveNew::move_new(src, dst) };
+        unsafe {
+            MoveNew::move_new(src, dst);
+        }
     };
     // SAFETY: MoveNew writes the destination initialized from the consumed unique
     // source.

@@ -107,7 +107,9 @@ impl<'frame, T> Slot<'frame, T>
         let pinned = unsafe { Pin::new_unchecked(&mut *self.memory) };
         // SAFETY: TryNew receives fresh pinned storage and must initialize it on
         // success.
-        unsafe { new.try_new(pinned)? };
+        unsafe {
+            new.try_new(pinned)?;
+        }
         // SAFETY: TryNew returned success, so the slot now contains a valid T.
         let ptr = unsafe { self.memory.assume_init_mut() };
         // SAFETY: this slot tracks the single owning MoveRef for the initialized
@@ -266,7 +268,9 @@ mod tests
         assert_eq!(drops.get(), 0);
         // SAFETY: raw points into live storage, and release transferred destruction to
         // us.
-        unsafe { core::ptr::drop_in_place(raw) };
+        unsafe {
+            core::ptr::drop_in_place(raw);
+        }
         assert_eq!(drops.get(), 1);
         drop(storage);
         assert_eq!(drops.get(), 1);

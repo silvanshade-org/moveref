@@ -136,7 +136,13 @@ redundant_type_annotations = "deny"
 renamed_function_params = "deny"
 return_and_then = "deny"
 same_name_method = "deny"
-semicolon_outside_block = "deny"
+# The semicolon ruling (owner, 2026-09-27): a block statement keeps its
+# semicolon inside the block. `semicolon_outside_block` together with the
+# pedantic `semicolon_if_nothing_returned` leaves a multi-line block statement
+# whose value is unit with no legal form, and rustfmt produces that form
+# whenever the block's expression does not fit one line. The inside form is the
+# one fixed point both lints and rustfmt agree on.
+semicolon_inside_block = "deny"
 # The shadowing ruling (owner, 2026-09-03): shadowing is preferred without
 # exception, so all three shadow lints stay off in every managed project.
 # `shadow_unrelated` and `shadow_reuse` misfire in practice; `shadow_same` bars

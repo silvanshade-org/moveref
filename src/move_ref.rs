@@ -213,7 +213,9 @@ impl<'frame, T: ?Sized> MoveRef<'frame, T>
         // SAFETY: release only removes the pin after consuming the owning reference.
         let mov = unsafe { Pin::into_inner_unchecked(pin) };
         // SAFETY: the caller takes over destruction after release.
-        unsafe { mov.status.release() };
+        unsafe {
+            mov.status.release();
+        }
         return mov.ptr;
     }
 }
@@ -527,7 +529,9 @@ mod test
                 // SAFETY: ptr came from the live unique MoveRef and is still in its slot.
                 assert_eq!(VAL1, unsafe { *ptr });
                 // SAFETY: ptr came from the live unique MoveRef and is still in its slot.
-                unsafe { ptr.write(VAL2) };
+                unsafe {
+                    ptr.write(VAL2);
+                }
                 // SAFETY: ptr came from the live unique MoveRef and is still in its slot.
                 assert_eq!(VAL2, unsafe { *ptr });
             }
